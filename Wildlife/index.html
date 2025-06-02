@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WildLife Explorer | Professional Wildlife Conservation</title>
+    <meta name="description" content="Join WildLife Explorer in protecting endangered species and conserving wildlife habitats worldwide. Professional conservation programs and education.">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #2D5016;
+            --secondary-green: #4A7C59;
+            --accent-green: #7FB069;
+            --light-green: #A7C957;
+            --bg-dark: #0A0B0D;
+            --bg-darker: #060708;
+            --text-light: #F8F9FA;
+            --text-muted: #B8BCC8;
+            --gradient-primary: linear-gradient(135deg, #2D5016 0%, #4A7C59 50%, #7FB069 100%);
+            --gradient-accent: linear-gradient(90deg, #7FB069, #A7C957, #DDE5B6);
+            --shadow-soft: 0 10px 40px rgba(45, 80, 22, 0.15);
+            --shadow-strong: 0 20px 60px rgba(45, 80, 22, 0.25);
+            --border-glass: 1px solid rgba(127, 176, 105, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-light);
+            overflow-x: hidden;
+            background: var(--bg-dark);
+            scroll-behavior: smooth;
+        }
+
+        /* Professional Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 11, 13, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-bottom: var(--border-glass);
+        }
+
+        .navbar.scrolled {
+            background: rgba(6, 7, 8, 0.98);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--accent-green);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-green);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-accent);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: var(--gradient-primary);
+            color: white !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-strong);
+        }
+
+        /* Hero Section - Professional Impact */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--primary-green) 100%);
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><radialGradient id="grad1" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:rgba(127,176,105,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(45,80,22,0.05);stop-opacity:1" /></radialGradient></defs><circle cx="200" cy="200" r="100" fill="url(%23grad1)"/><circle cx="800" cy="400" r="80" fill="url(%23grad1)"/><circle cx="1000" cy="600" r="120" fill="url(%23grad1)"/></svg>') no-repeat center;
+            background-size: cover;
+            animation: floatBg 25s ease-in-out infinite;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+            50% { transform: translateY(-30px) rotate(2deg) scale(1.05); }
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            z-index: 2;
+            max-width: 900px;
+            padding: 2rem;
+            animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(127, 176, 105, 0.15);
+            border: var(--border-glass);
+            border-radius: 50px;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 2.5rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-primary, .cta-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.05rem;
+        }
+
+        .cta-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-strong);
+        }
+
+        .cta-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: var(--border-glass);
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-secondary:hover {
+            background: rgba(127, 176, 105, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Professional Stats Section */
+        .stats-hero {
+            background: rgba(127, 176, 105, 0.05);
+            padding: 4rem 2rem;
+            border-top: var(--border-glass);
+            border-bottom: var(--border-glass);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .stat-item {
+            color: white;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Conservation Programs Section */
+        .programs-section {
+            padding: 8rem 2rem;
+            background: var(--bg-darker);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(127, 176, 105, 0.15);
+            border: var(--border-glass);
+            border-radius: 50px;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: var(--accent-green);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-description {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .program-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: var(--border-glass);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .program-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-accent);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .program-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .program-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-strong);
+            border-color: rgba(127, 176, 105, 0.4);
+        }
+
+        .program-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .program-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .program-card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .program-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .program-stat {
+            text-align: center;
+        }
+
+        .program-stat-number {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--accent-green);
+            display: block;
+        }
+
+        .program-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .program-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-green);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .program-link:hover {
+            gap: 0.75rem;
+            color: var(--light-green);
+        }
+
+        /* Species Spotlight */
+        .species-section {
+            padding: 8rem 2rem;
+            background: var(--bg-dark);
+        }
+
+        .species-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .species-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            border-radius: 24px;
+            overflow: hidden;
+            border: var(--border-glass);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .species-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: var(--shadow-strong);
+            border-color: rgba(127, 176, 105, 0.5);
+        }
+
+        .species-image {
+            height: 200px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .species-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(transparent, rgba(0,0,0,0.3));
+        }
+
+        .species-content {
+            padding: 2rem;
+        }
+
+        .species-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .status-endangered {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .status-vulnerable {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-success {
+            background: rgba(127, 176, 105, 0.2);
+            color: var(--accent-green);
+            border: 1px solid rgba(127, 176, 105, 0.3);
+        }
+
+        .species-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: white;
+        }
+
+        .species-card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Interactive Map Section */
+        .map-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--primary-green) 100%);
+            text-align: center;
+        }
+
+        .map-container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(20px);
+            border: var(--border-glass);
+        }
+
+        .continents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .continent-btn {
+            background: rgba(127, 176, 105, 0.15);
+            border: var(--border-glass);
+            border-radius: 16px;
+            padding: 1.5rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .continent-btn:hover {
+            background: rgba(127, 176, 105, 0.25);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .continent-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .continent-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Impact Section */
+        .impact-section {
+            padding: 8rem 2rem;
+            background: var(--bg-dark);
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 3rem auto;
+        }
+
+        .impact-card {
+            background: rgba(127, 176, 105, 0.08);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            border: var(--border-glass);
+            transition: all 0.3s ease;
+        }
+
+        .impact-card:hover {
+            border-color: rgba(127, 176, 105, 0.6);
+            box-shadow: 0 0 40px rgba(127, 176, 105, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .impact-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .impact-label {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-darker);
+            padding: 4rem 2rem 2rem;
+            border-top: var(--border-glass);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: rgba(127, 176, 105, 0.15);
+            border: var(--border-glass);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-green);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-section h4 {
+            color: white;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-green);
+        }
+
+        .footer-bottom {
+            border-top: var(--border-glass);
+            margin-top: 3rem;
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero-cta-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .programs-grid,
+            .species-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .continents-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Smooth Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scroll Progress */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--gradient-accent);
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        /* 3D Canvas */
+        #threejs-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- 3D Background -->
+    <canvas id="threejs-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">
+                <div class="logo-icon">🦁</div>
+                WildLife Explorer
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#programs">Programs</a></li>
+                <li><a href="#species">Species</a></li>
+                <li><a href="#impact">Impact</a></li>
+                <li><a href="#explore">Explore</a></li>
+                <li><a href="#programs" class="nav-cta">Get Involved</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-badge">🌍 Leading Global Wildlife Conservation</div>
+            <h1>Protecting Wildlife<br>For Future Generations</h1>
+            <p class="hero-subtitle">Join our mission to conserve endangered species and preserve natural habitats through science-based conservation programs and community engagement worldwide.</p>
+            <div class="hero-cta-group">
+                <a href="#programs" class="cta-primary">
+                    <span>🚀</span> Start Conservation Journey
+                </a>
+                <a href="#species" class="cta-secondary">
+                    <span>🔍</span> Explore Wildlife
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Hero -->
+    <section class="stats-hero">
+        <div class="stats-container">
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-count="2500">0</span>
+                <div class="stat-label">Species Protected</div>
+            </div>
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-count="75">0</span>
+                <div class="stat-label">Countries Active</div>
+            </div>
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-count="1200000">0</span>
+                <div class="stat-label">Hectares Conserved</div>
+            </div>
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-count="98">0</span>
+                <div class="stat-label">Success Rate %</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conservation Programs -->
+    <section class="programs-section" id="programs">
+        <div class="section-header fade-in">
+            <div class="section-badge">🛡️ Our Programs</div>
+            <h2 class="section-title">Conservation Programs</h2>
+            <p class="section-description">Comprehensive, science-based conservation initiatives designed to protect endangered species and restore critical habitats across the globe.</p>
+        </div>
+        
+        <div class="programs-grid">
+            <div class="program-card fade-in">
+                <div class="program-icon">🐅</div>
+                <h3>Big Cat Conservation</h3>
+                <p>Protecting tigers, lions, leopards, and other big cats through habitat preservation, anti-poaching efforts, and community-based conservation programs.</p>
+                <div class="program-stats">
+                    <div class="program-stat">
+                        <span class="program-stat-number">450+</span>
+                        <span class="program-stat-label">Tigers Protected</span>
+                    </div>
+                    <div class="program-stat">
+                        <span class="program-stat-number">12</span>
+                        <span class="program-stat-label">Reserves</span>
+                    </div>
+                </div>
+                <a href="#" class="program-link">Learn More →</a>
+            </div>
+
+            <div class="program-card fade-in">
+                <div class="program-icon">🐘</div>
+                <h3>Elephant Protection</h3>
+                <p>Safeguarding African and Asian elephants through anti-poaching initiatives, habitat corridors, and human-elephant conflict mitigation.</p>
+                <div class="program-stats">
+                    <div class="program-stat">
+                        <span class="program-stat-number">2,800</span>
+                        <span class="program-stat-label">Elephants Safe</span>
+                    </div>
+                    <div class="program-stat">
+                        <span class="program-stat-label">Corridors</span>
+                    </div>
+                </div>
+                <a href="#" class="program-link">Learn More →</a>
+            </div>
+
+            <div class="program-card fade-in">
+                <div class="program-icon">🐋</div>
+                <h3>Marine Conservation</h3>
+                <p>Protecting whales, dolphins, sea turtles, and marine ecosystems through ocean sanctuary establishment and sustainable fishing practices.</p>
+                <div class="program-stats">
+                    <div class="program-stat">
+                        <span class="program-stat-number">15</span>
+                        <span class="program-stat-label">Sanctuaries</span>
+                    </div>
+                    <div class="program-stat">
+                        <span class="program-stat-number">95%</span>
+                        <span class="program-stat-label">Recovery Rate</span>
+                    </div>
+                </div>
+                <a href="#" class="program-link">Learn More →</a>
+            </div>
+
+            <div class="program-card fade-in">
+                <div class="program-icon">🦅</div>
+                <h3>Avian Protection</h3>
+                <p>Conserving endangered bird species through habitat restoration, migration corridor protection, and breeding programs worldwide.</p>
+                <div class="program-stats">
+                    <div class="program-stat">
+                        <span class="program-stat-number">1,200</span>
+                        <span class="program-stat-label">Species Monitored</span>
+                    </div>
+                    <div class="program-stat">
+                        <span class="program-stat-number">25</span>
+                        <span class="program-stat-label">Breeding Centers</span>
+                    </div>
+                </div>
+                <a href="#" class="program-link">Learn More →</a>
+            </div>
+
+            <div class="program-card fade-in">
+                <div class="program-icon">🌿</div>
+                <h3>Habitat Restoration</h3>
+                <p>Rebuilding critical ecosystems through reforestation, wetland restoration, and sustainable land management practices.</p>
+                <div class="program-stats">
+                    <div class="program-stat">
+                        <span class="program-stat-number">500K</span>
+                        <span class="program-stat-label">Hectares Restored</span>
+                    </div>
+                    <div class="program-stat">
+                        <span class="program-stat-number">89%</span>
+                        <span class="program-stat-label">Success Rate</span>
+                    </div>
+                </div>
+                <a href="#" class="program-link">Learn More →</a>
+            </div>
+
+            <div class="program-card fade-in">
+                <div class="program-icon">👥</div>
+                <h3>Community Engagement</h3>
+                <p>Empowering local communities through education, sustainable livelihood programs, and conservation training initiatives.</p>
+                <div class="program-stats">
+                    <div class="program-stat">
+                        <span class="program-stat-number">50K</span>
+                        <span class="program-stat-label">People Trained</span>
+                    </div>
+                    <div class="program-stat">
+                        <span class="program-stat-number">200</span>
+                        <span class="program-stat-label">Communities</span>
+                    </div>
+                </div>
+                <a href="#" class="program-link">Learn More →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Species Spotlight -->
+    <section class="species-section" id="species">
+        <div class="section-header fade-in">
+            <div class="section-badge">🦁 Species Focus</div>
+            <h2 class="section-title">Featured Species</h2>
+            <p class="section-description">Meet the incredible species we're working to protect, each with unique conservation needs and remarkable stories of resilience.</p>
+        </div>
+
+        <div class="species-grid">
+            <div class="species-card fade-in">
+                <div class="species-image">🐅</div>
+                <div class="species-content">
+                    <div class="species-status status-endangered">Endangered</div>
+                    <h3>Siberian Tiger</h3>
+                    <p>The largest living cat species, with only 400-500 individuals remaining in the wild. Our conservation efforts focus on habitat protection and anti-poaching measures in Russia and China.</p>
+                </div>
+            </div>
+
+            <div class="species-card fade-in">
+                <div class="species-image">🐘</div>
+                <div class="species-content">
+                    <div class="species-status status-vulnerable">Vulnerable</div>
+                    <h3>African Elephant</h3>
+                    <p>These gentle giants face threats from poaching and habitat loss. Our programs protect migration routes and work with local communities to reduce human-elephant conflict.</p>
+                </div>
+            </div>
+
+            <div class="species-card fade-in">
+                <div class="species-image">🐋</div>
+                <div class="species-content">
+                    <div class="species-status status-success">Recovering</div>
+                    <h3>Humpback Whale</h3>
+                    <p>A conservation success story! Thanks to protection efforts, humpback whale populations have recovered from near extinction to over 80,000 individuals worldwide.</p>
+                </div>
+            </div>
+
+            <div class="species-card fade-in">
+                <div class="species-image">🦏</div>
+                <div class="species-content">
+                    <div class="species-status status-endangered">Critically Endangered</div>
+                    <h3>Black Rhinoceros</h3>
+                    <p>With fewer than 5,500 individuals left, black rhinos are one of our priority species. Our anti-poaching units and breeding programs are showing promising results.</p>
+                </div>
+            </div>
+
+            <div class="species-card fade-in">
+                <div class="species-image">🐼</div>
+                <div class="species-content">
+                    <div class="species-status status-vulnerable">Vulnerable</div>
+                    <h3>Giant Panda</h3>
+                    <p>Once critically endangered, giant pandas have made a remarkable recovery through dedicated conservation efforts. Over 1,800 now live in the wild across China.</p>
+                </div>
+            </div>
+
+            <div class="species-card fade-in">
+                <div class="species-image">🦅</div>
+                <div class="species-content">
+                    <div class="species-status status-success">Success Story</div>
+                    <h3>Bald Eagle</h3>
+                    <p>From near extinction in the 1960s to over 300,000 individuals today, the bald eagle recovery demonstrates the power of dedicated conservation efforts.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Map -->
+    <section class="map-section" id="explore">
+        <div class="section-header fade-in">
+            <div class="section-badge">🌍 Global Reach</div>
+            <h2 class="section-title">Conservation Worldwide</h2>
+            <p class="section-description">Explore our conservation efforts across all continents, protecting diverse species and ecosystems in their natural habitats.</p>
+        </div>
+
+        <div class="map-container fade-in">
+            <div class="continents-grid">
+                <div class="continent-btn" onclick="showContinentInfo('africa')">
+                    <span class="continent-icon">🦁</span>
+                    <div class="continent-name">Africa</div>
+                </div>
+                <div class="continent-btn" onclick="showContinentInfo('asia')">
+                    <span class="continent-icon">🐅</span>
+                    <div class="continent-name">Asia</div>
+                </div>
+                <div class="continent-btn" onclick="showContinentInfo('america')">
+                    <span class="continent-icon">🐻</span>
+                    <div class="continent-name">Americas</div>
+                </div>
+                <div class="continent-btn" onclick="showContinentInfo('europe')">
+                    <span class="continent-icon">🦌</span>
+                    <div class="continent-name">Europe</div>
+                </div>
+                <div class="continent-btn" onclick="showContinentInfo('oceania')">
+                    <span class="continent-icon">🦘</span>
+                    <div class="continent-name">Oceania</div>
+                </div>
+                <div class="continent-btn" onclick="showContinentInfo('antarctica')">
+                    <span class="continent-icon">🐧</span>
+                    <div class="continent-name">Antarctica</div>
+                </div>
+            </div>
+            <div id="continent-info" style="margin-top: 2rem; padding: 2rem; background: rgba(255,255,255,0.1); border-radius: 16px; min-height: 150px;">
+                <p style="color: var(--text-muted); font-size: 1.1rem;">Click on a continent to explore our conservation programs in that region.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact-section" id="impact">
+        <div class="section-header fade-in">
+            <div class="section-badge">📈 Our Impact</div>
+            <h2 class="section-title">Conservation Impact</h2>
+            <p class="section-description">Measurable results from our dedicated conservation efforts across the globe, demonstrating real change for wildlife and their habitats.</p>
+        </div>
+
+        <div class="impact-grid">
+            <div class="impact-card fade-in">
+                <span class="impact-number" data-count="2500">0</span>
+                <div class="impact-label">Species Under Protection</div>
+            </div>
+            <div class="impact-card fade-in">
+                <span class="impact-number" data-count="1200000">0</span>
+                <div class="impact-label">Hectares Conserved</div>
+            </div>
+            <div class="impact-card fade-in">
+                <span class="impact-number" data-count="450">0</span>
+                <div class="impact-label">Research Projects</div>
+            </div>
+            <div class="impact-card fade-in">
+                <span class="impact-number" data-count="50000">0</span>
+                <div class="impact-label">People Educated</div>
+            </div>
+            <div class="impact-card fade-in">
+                <span class="impact-number" data-count="98">0</span>
+                <div class="impact-label">Success Rate %</div>
+            </div>
+            <div class="impact-card fade-in">
+                <span class="impact-number" data-count="75">0</span>
+                <div class="impact-label">Countries Active</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>WildLife Explorer</h3>
+                <p>Leading the global effort to protect endangered species and preserve natural habitats for future generations through science-based conservation and community engagement.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link">📘</a>
+                    <a href="#" class="social-link">🐦</a>
+                    <a href="#" class="social-link">📷</a>
+                    <a href="#" class="social-link">📺</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Programs</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Big Cat Conservation</a></li>
+                    <li><a href="#">Elephant Protection</a></li>
+                    <li><a href="#">Marine Conservation</a></li>
+                    <li><a href="#">Avian Protection</a></li>
+                    <li><a href="#">Habitat Restoration</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Get Involved</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Volunteer</a></li>
+                    <li><a href="#">Donate</a></li>
+                    <li><a href="#">Adopt a Species</a></li>
+                    <li><a href="#">Educational Programs</a></li>
+                    <li><a href="#">Corporate Partnerships</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Research Papers</a></li>
+                    <li><a href="#">Conservation News</a></li>
+                    <li><a href="#">Species Database</a></li>
+                    <li><a href="#">Educational Materials</a></li>
+                    <li><a href="#">Annual Reports</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>About</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Our Mission</a></li>
+                    <li><a href="#">Leadership Team</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Press Center</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 WildLife Explorer. All rights reserved. | Privacy Policy | Terms of Service</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const scrollProgress = document.getElementById('scrollProgress');
+            
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            // Scroll progress
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            scrollProgress.style.width = scrolled + '%';
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Animated counters
+        function animateCounter(element, target) {
+            const increment = target / 100;
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                
+                if (target >= 1000000) {
+                    element.textContent = (current / 1000000).toFixed(1) + 'M';
+                } else if (target >= 1000) {
+                    element.textContent = (current / 1000).toFixed(0) + 'K';
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 50);
+        }
+
+        // Start counters when they become visible
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const target = parseInt(counter.getAttribute('data-count'));
+                    animateCounter(counter, target);
+                    counterObserver.unobserve(counter);
+                }
+            });
+        });
+
+        document.querySelectorAll('[data-count]').forEach(counter => {
+            counterObserver.observe(counter);
+        });
+
+        // Continent info display
+        const continentData = {
+            africa: {
+                title: "Africa Conservation",
+                content: "Home to 25% of the world's mammal species, our African programs protect elephants, rhinos, lions, and countless other species across 15 countries. Key focuses include anti-poaching operations and community-based conservation."
+            },
+            asia: {
+                title: "Asia Conservation", 
+                content: "Asia's incredible biodiversity includes tigers, pandas, orangutans, and snow leopards. Our programs span 20 countries, focusing on habitat corridors, anti-trafficking efforts, and sustainable tourism development."
+            },
+            america: {
+                title: "Americas Conservation",
+                content: "From the Amazon rainforest to the Arctic tundra, we protect jaguars, polar bears, sea turtles, and migratory birds across North and South America through innovative conservation strategies."
+            },
+            europe: {
+                title: "Europe Conservation",
+                content: "European wildlife recovery programs focus on brown bears, wolves, lynx, and bird species. We work on habitat connectivity, rewilding projects, and human-wildlife coexistence across 12 countries."
+            },
+            oceania: {
+                title: "Oceania Conservation",
+                content: "Protecting unique species like koalas, Tasmanian devils, and marine life around Australia and New Zealand. Our programs address habitat fragmentation and climate change impacts on island ecosystems."
+            },
+            antarctica: {
+                title: "Antarctica Conservation",
+                content: "Monitoring penguin colonies, protecting marine ecosystems, and researching climate change impacts on polar wildlife. Our work supports international Antarctic conservation treaties and marine protected areas."
+            }
+        };
+
+        function showContinentInfo(continent) {
+            const infoDiv = document.getElementById('continent-info');
+            const data = continentData[continent];
+            
+            infoDiv.innerHTML = `
+                <h3 style="color: var(--accent-green); margin-bottom: 1rem; font-family: 'Playfair Display', serif;">${data.title}</h3>
+                <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.6;">${data.content}</p>
+            `;
+        }
+
+        // Three.js Background Animation
+        let scene, camera, renderer, particles;
+
+        function initThreeJS() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('threejs-canvas'),
+                alpha: true 
+            });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0);
+
+            // Create floating particles
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
+
+            for (let i = 0; i < 1000; i++) {
+                vertices.push(
+                    (Math.random() - 0.5) * 2000,
+                    (Math.random() - 0.5) * 2000,
+                    (Math.random() - 0.5) * 2000
+                );
+                
+                colors.push(
+                    Math.random() * 0.5 + 0.5,
+                    Math.random() * 0.8 + 0.2,
+                    Math.random() * 0.3 + 0.7
+                );
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 3,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            camera.position.z = 1000;
+
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            if (particles) {
+                particles.rotation.x += 0.0005;
+                particles.rotation.y += 0.001;
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (camera && renderer) {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+        });
+
+        // Initialize Three.js when page loads
+        window.addEventListener('load', initThreeJS);
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.program-card, .species-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Mobile menu toggle (basic implementation)
+        const navbar = document.querySelector('.nav-links');
+        let mobileMenuOpen = false;
+
+        function toggleMobileMenu() {
+            mobileMenuOpen = !mobileMenuOpen;
+            if (mobileMenuOpen) {
+                navbar.style.display = 'flex';
+                navbar.style.flexDirection = 'column';
+                navbar.style.position = 'absolute';
+                navbar.style.top = '100%';
+                navbar.style.left = '0';
+                navbar.style.right = '0';
+                navbar.style.background = 'rgba(6, 7, 8, 0.98)';
+                navbar.style.padding = '2rem';
+                navbar.style.backdropFilter = 'blur(20px)';
+            } else {
+                navbar.style.display = 'none';
+            }
+        }
+
+        // Add mobile menu button (you can style this further)
+        if (window.innerWidth <= 768) {
+            const mobileButton = document.createElement('button');
+            mobileButton.innerHTML = '☰';
+            mobileButton.style.cssText = `
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+                display: block;
+            `;
+            mobileButton.onclick = toggleMobileMenu;
+            document.querySelector('.nav-container').appendChild(mobileButton);
+        }
+    </script>
+</body>
+</html>
